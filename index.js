@@ -34,8 +34,8 @@ app.post("/notification", (req, res) => {
             title: title,
             body: message,
             icon: "/assets/images/icon.png",
+            url: "https://revolveddesign.com"
         });
-        console.log(payload);
         webPush
             .sendNotification(pushSubscription, payload)
             .then(result => {
