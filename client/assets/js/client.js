@@ -7,11 +7,12 @@ const initServiceWorker = async () => {
     const subscription = await register.pushManager.subscribe({
         userVisibleOnly: true,
         applicationServerKey: urlBase64ToUint8Array(publicVapidKey)
-    });
-    document.querySelector('button')?.addEventListener('click', () => {
+    })
+
+    document.querySelector('button#subscribe')?.addEventListener('click', () => {
         Notification.requestPermission().then(perm => {
             if (perm === 'granted') {
-                fetch("/subscribe", {
+                fetch("/subscription/add", {
                     method: "POST",
                     body: JSON.stringify(subscription),
                     headers: {
@@ -19,11 +20,21 @@ const initServiceWorker = async () => {
                         'charset': 'utf-8'
                     }
                 }).catch(err => console.error(err));
-                console.log("Sent");
             }
         });
     });
 }
+
+document.querySelector('button#send_notification')?.addEventListener('click', () => {
+    fetch("/notification", {
+        method: "POST",
+        body: JSON.stringify({}),
+        headers: {
+            "content-type": "application/json",
+            'charset': 'utf-8'
+        }
+    }).catch(err => console.error(err));
+})
 
 if ("serviceWorker" in navigator) {
     initServiceWorker();
@@ -34,10 +45,8 @@ function urlBase64ToUint8Array(base64String) {
     const base64 = (base64String + padding)
         .replace(/\-/g, "+")
         .replace(/_/g, "/");
-
     const rawData = window.atob(base64);
     const outputArray = new Uint8Array(rawData.length);
-
     for (let i = 0; i < rawData.length; ++i) {
         outputArray[i] = rawData.charCodeAt(i);
     }
