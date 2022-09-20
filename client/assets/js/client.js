@@ -1,7 +1,7 @@
 const publicVapidKey = "BDqQWzFa9U44rdNeurzNf2NxHS-4_fZBxVkgw8QB0pOg6MaRjyMdSfAOJ5toxhQhPHVppkqtbvd7k0zwBLBycpI";
 
 const initServiceWorker = async () => {
-    const register = await navigator.serviceWorker.register("/worker.js", {
+    const register = await navigator.serviceWorker.register("../../worker.js", {
         scope: "/"
     });
     const subscription = await register.pushManager.subscribe({
