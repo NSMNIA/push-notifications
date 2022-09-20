@@ -19,6 +19,7 @@ webPush.setVapidDetails(
 );
 
 app.post("/notification", (req, res) => {
+    const { title, message } = req.body;
     const fileName = path.join(__dirname, '/client/assets/json/subscribers.json');
     const file = require(fileName);
     for (let subscriberEndpoint in file) {
@@ -29,7 +30,12 @@ app.post("/notification", (req, res) => {
                 p256dh: file[subscriberEndpoint].p256dh
             }
         };
-        const payload = JSON.stringify({ title: "Push Test" });
+        const payload = JSON.stringify({
+            title: title,
+            body: message,
+            icon: "/assets/images/icon.png",
+        });
+        console.log(payload);
         webPush
             .sendNotification(pushSubscription, payload)
             .then(result => {
@@ -46,10 +52,8 @@ app.post("/subscription/add", (req, res) => {
     const fileName = path.join(__dirname, '/client/assets/json/subscribers.json');
     const subscription = req.body;
     const file = require(fileName);
-    // if (!JSON.parse(fs.readFileSync(fileName))?.includes(subscription.endpoint)) {
     file[subscription.endpoint] = subscription.keys;
     fs.writeFile(fileName, JSON.stringify(file), err => { if (err) { console.log(err) } });
-    // }
     res.status(201).json({});
 });
 

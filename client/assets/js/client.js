@@ -25,10 +25,13 @@ const initServiceWorker = async () => {
     });
 }
 
-document.querySelector('button#send_notification')?.addEventListener('click', () => {
+document.querySelector('#send_notification')?.addEventListener('submit', e => {
+    e.preventDefault();
+    let title = document.querySelector(`input[name="title"]`).value;
+    let message = document.querySelector(`input[name="message"]`).value;
     fetch("/notification", {
         method: "POST",
-        body: JSON.stringify({}),
+        body: JSON.stringify({ title, message }),
         headers: {
             "content-type": "application/json",
             'charset': 'utf-8'
