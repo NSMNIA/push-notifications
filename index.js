@@ -18,11 +18,13 @@ webPush.setVapidDetails(
     privateVapidKey
 );
 
-app.post('/subscribe', (req, res) => {
+app.post("/subscribe", (req, res) => {
     const subscription = req.body;
     res.status(201).json({});
-    const payload = JSON.stringify({ title: 'Push Test' });
-    webPush.sendNotification(subscription, payload).catch(err => console.error(err));
+    const payload = JSON.stringify({ title: "Push Test" });
+    webPush
+        .sendNotification(subscription, payload)
+        .catch(err => console.error(err));
 });
 
-app.listen(process.env.PORT || 3000, () => console.log(`Server started on port ${PORT}`));
+app.listen(process.env.PORT || 3000, () => console.log(`Server started on port ${process.env.PORT}`));
